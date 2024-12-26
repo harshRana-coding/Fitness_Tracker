@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
 
-from backend.config import get
+from config import get
 
 model_path = get('model', 'model')
 label_encoder_path = get('model', 'label_encoder')
@@ -15,6 +15,20 @@ loaded_model = joblib.load(model_path)
 
 # Load the LabelEncoder
 loaded_le = joblib.load(label_encoder_path)
+
+# Manually create the mapping of 'Exercise n' to actual exercises
+exercise_mapping = {
+    'Exercise 1': 'Running',
+    'Exercise 2': 'Walking',
+    'Exercise 3': 'Cycling',
+    'Exercise 4': 'Swimming',
+    'Exercise 5': 'Jumping',
+    'Exercise 6': 'Yoga',
+    'Exercise 7': 'Weightlifting',
+    'Exercise 8': 'Boxing',
+    'Exercise 9': 'Dancing',
+    'Exercise 10': 'Hiking'
+}
 
 
 def predict_workout_plan(
@@ -37,4 +51,7 @@ def predict_workout_plan(
     # Decode 'Exercise' back to its original form
     exercise = loaded_le.inverse_transform([int(exercise_encoded)])[0]
 
-    return f"Predicted Exercise: {exercise}, Intensity: {intensity}, Duration: {duration}"
+    # Get the actual exercise name
+    exercise_name = exercise_mapping.get(exercise, "Unknown Exercise")  
+
+    return f"Predicted Exercise: {exercise_name}, Intensity: {intensity}, Duration: {duration}"

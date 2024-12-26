@@ -4,7 +4,7 @@ import pandas as pd
 from nltk.corpus import stopwords
 from sklearn.neighbors import NearestNeighbors
 
-from backend.config import get
+from config import get
 
 warnings.filterwarnings('ignore')
 
@@ -67,12 +67,17 @@ class Profile:
         self.df6 = pd.DataFrame(columns=list(Profile.df.columns))
 
     def removestop(self, tokens):
-        stop = set(stopwords.words('english'))
-        file = open(stopwords_path, 'r')
-        l = list(file.read().split())
-        stop = list(stop) + l
-        l = [token for token in tokens if token not in stop]
-        return l
+        stop_words = set(stopwords.words('english'))  # 'stop' renamed to 'stop_words' to avoid conflict
+        with open(stopwords_path, 'r') as file:
+            custom_stopwords = file.read().split()  # Read custom stopwords from file
+
+        stop_words.update(custom_stopwords)  # Add custom stopwords to the set of NLTK stopwords
+
+        # Filter out stopwords from the tokens
+        filtered_tokens = [token for token in tokens if token not in stop_words]
+    
+        return filtered_tokens
+
 
     def inputs(self, diet, disease, Nutrient, food_type, favorite_food):
 
@@ -127,7 +132,7 @@ class Profile:
 
         df_merge = pd.concat([df2, df3, df4, df5, df6], axis=0).drop_duplicates(subset='Name')
         df_merge = df_merge.filter(['Name', 'Nutrient', 'Veg_Non', 'Price', 'Review', 'description'])
-        print(df_merge.shape)
+        #print(df_merge.shape)
 
         return df_merge
 
