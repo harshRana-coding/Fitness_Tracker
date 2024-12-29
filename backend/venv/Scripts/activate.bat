@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set "VIRTUAL_ENV=C:\Users\harsh.rana.i_dotpe\Desktop\Project\personalized-fitness-recommender-system\backend\venv"
+set "VIRTUAL_ENV=C:\Users\Harsh\Desktop\Fitness Tracker\Fitness_Tracker\backend\venv"
 
 if not defined PROMPT set PROMPT=$P$G
 
